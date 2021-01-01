@@ -35,7 +35,7 @@ func (ah AuthHandler) AuthMiddleware(next http.HandlerFunc, auth bool) http.Hand
 		if err != nil || c.Value == "" {
 			si.GenerateID(int64(config.SessionIDLength))
 
-			cookie := http.Cookie{Name: config.SessionIDName, Value: url.QueryEscape(si.GetID()), Path: "/", HttpOnly: true, MaxAge: 0}
+			cookie := http.Cookie{Name: config.SessionIDName, Value: url.QueryEscape(si.GetID()), Path: "/", HttpOnly: true, Secure: true, MaxAge: 0}
 			http.SetCookie(w, &cookie)
 
 		} else {

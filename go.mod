@@ -1,5 +1,6 @@
 module davidws
 
+// +heroku goVersion go1.12
 go 1.15
 
 require (
