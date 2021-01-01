@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+
+#chat {
+    max-height: 70vh;
+    min-height: 70vh;
+
+    max-width: 50rem;
+    overflow-y: scroll;    
+
+    border: 1px solid gray; 
+    background-color: aquamarine;
+    scroll-behavior: smooth;
+}
+
+.hidden {
+    display: none;
+}
+
+.btn-nav {
+    padding: 0.3rem 0.5rem;
+    background-color: aquamarine;
+    border-style: solid;
+    border-width: 1px;
+} 
+
+.btn-nav:focus {
+    border-style: solid;
+}
+
+.fade {
+    animation: fadeout .8s;
+    animation-iteration-count: infinite;
+}
+
+
+.nav {
+    margin: 0;
+    padding: .5rem;
+    display: flex;
+    align-items: baseline;
+    list-style: none;
+    justify-content: space-between;
+    background-color: bisque;
+    min-height: 5vh;
+}
+.message{
+    padding: 0.2rem;
+    margin: 1rem 0.2rem;
+    border: 1px solid gray; 
+    border-radius: 0.4;
+    background-color: white;
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
