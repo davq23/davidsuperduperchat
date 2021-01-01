@@ -23,6 +23,9 @@ func main() {
 	utils.FailIfErr(err)
 	defer pgxPool.Close()
 
+	err = db.CreateTable(context.Background(), pgxPool)
+	utils.FailIfErr(err)
+
 	// Redis connection
 	redisClient, err := db.RedisConnect(context.Background())
 	utils.FailIfErr(err)
