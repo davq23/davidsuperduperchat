@@ -7,3 +7,4 @@ CREATE TABLE users (
     username VARCHAR(156) NOT NULL UNIQUE,
     hash TEXT NOT NULL
 );
+
