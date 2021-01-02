@@ -20,7 +20,7 @@ body {
 #App {
     margin-top: 1rem;
     display: flex;
-    align-self: center;
+    min-width: 100vw;
 }
 
 .hidden {
@@ -47,6 +47,7 @@ body {
     padding: 0.8rem;
     border: 1px solid gray; 
     border-radius: 0.4;
+    justify-content: center;
 }
 
 .form-label {
