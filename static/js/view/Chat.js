@@ -13,6 +13,7 @@ export default class ChatView extends View {
 
         const self = this;
 
+        // Message submit function
         this.form.onsubmit = function(event) {
             event.preventDefault();
         
@@ -38,6 +39,7 @@ export default class ChatView extends View {
         
     }
 
+    // formHTML initializes chat HTML elements
     formHTML() {
         this.chatDiv = document.createElement("div");
         this.chat = document.createElement("div");
@@ -61,12 +63,12 @@ export default class ChatView extends View {
         this.chatDiv.appendChild(this.form);
         this.chatDiv.appendChild(this.closeConMessage);
         this.fragment.appendChild(this.chatDiv);
-
-        return this.chatDiv;
     }
 
+    // initConnection initializes websocket connection returning a promise
     initConnection() {
         const self = this;
+        
         return new Promise(function(resolve, reject) {
             self.ws = new WebSocket("wss://infinite-ocean-38389.herokuapp.com/chat");
             

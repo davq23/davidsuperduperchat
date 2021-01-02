@@ -4,18 +4,23 @@ import ChatView from "./js/view/Chat.js"
 import LoadingView from "./js/view/Loading.js";
 
 document.onreadystatechange = async function() {
+
+    // App starts when page is completely loaded
     if (document.readyState == 'complete') {
         const AppDiv = document.getElementById("App");  
+
+        // Nav buttons
         const loginButton = document.getElementById("login-button");
         const logoutButton = document.getElementById("logout-button");
         const signupButton = document.getElementById("signup-button");
 
+        // Views
         const signupView = new SignupView(AppDiv);
         const loginView = new LoginView(AppDiv);
         const loadingView = new LoadingView(AppDiv);
-
         let chatView = null;
 
+        // App events
         AppDiv.addEventListener('loading-', function(event) {
             event.preventDefault();
             loadingView.render();
@@ -25,11 +30,12 @@ document.onreadystatechange = async function() {
             loadingView.render();
 
             try {
-                
+                // Try to open websocket
                 chatView = new ChatView(AppDiv);
 
                 await chatView.initConnection()
     
+                 // If successful, render chat and hide buttons
                 chatView.render();
 
                 loginButton.disabled = true;
@@ -43,18 +49,17 @@ document.onreadystatechange = async function() {
 
             } catch(err) {
                 console.log(err);
+
+                // Render login and load buttons
                 loginView.render();
 
                 loginButton.classList.remove('hidden');                
                 signupButton.classList.remove('hidden');  
                 logoutButton.classList.add('hidden');
 
-
                 loginButton.disabled = false;
                 signupButton.disabled = false;
                 logoutButton.disabled = true;
-
-               
             }
 
             loginButton.onclick = function() {
