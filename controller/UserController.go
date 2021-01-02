@@ -246,6 +246,8 @@ func checkPassword(password, hash string) bool {
 func (uc *UserController) registerClient(w http.ResponseWriter, r *http.Request) (client *chat.Client) {
 	sessionInfo := r.Context().Value(ctxtypes.SessionInfo).(model.SessionInfo)
 
+	uc.hub.Logger.LogChan <- sessionInfo
+
 	if sessionInfo.UserID == 0 {
 		w.WriteHeader(http.StatusUnauthorized)
 		io.WriteString(w, "User not allowed")
@@ -278,6 +280,8 @@ func (uc *UserController) registerClient(w http.ResponseWriter, r *http.Request)
 // SendMessages contains the main loop where messages are sent
 func (uc *UserController) SendMessages(w http.ResponseWriter, r *http.Request) {
 	client := uc.registerClient(w, r)
+
+	uc.hub.Logger.LogChan <- client
 
 	if client != nil {
 		uc.hub.Register <- client
