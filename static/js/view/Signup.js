@@ -15,21 +15,23 @@ export default class SignupView extends View {
         const usernameLabel = document.createElement('label'); 
         usernameLabel.innerText = 'Username';
         usernameLabel.for = 'username';
+        usernameLabel.classList.add('form-label');
 
         const passwordLabel = document.createElement('label'); 
         passwordLabel.innerText = 'Password';
         passwordLabel.for = 'password';
-
+        passwordLabel.classList.add('form-label');
 
         this.usernameInput = document.createElement('input');
         this.usernameInput.name = 'username';
         this.usernameInput.placeholder = 'Username';
-
+        this.usernameInput.classList.add('form-input');
 
         this.passwordInput  = document.createElement('input');
         this.passwordInput.type = 'password';
         this.passwordInput.name = 'password';
         this.passwordInput.placeholder = 'Password';
+        this.passwordInput.classList.add('form-input');
 
         this.submitButton = document.createElement('button');
         this.submitButton.innerText = "Send"

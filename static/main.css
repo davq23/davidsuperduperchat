@@ -37,6 +37,13 @@ body {
     animation-iteration-count: infinite;
 }
 
+.form-label {
+    margin-bottom: 0.3rem;
+}
+
+.form-input {
+    margin-bottom: 0.5rem;
+}
 
 .nav {
     margin: 0;
