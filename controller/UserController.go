@@ -178,7 +178,7 @@ func (uc *UserController) checkSignup(ctx context.Context, username, password st
 	return
 }
 
-func (uc *UserController) checkUserInfo(ctx context.Context, username, password string) (userID string, err error) {
+func (uc *UserController) checkUserInfo(ctx context.Context, username, password string) (userID int, err error) {
 	user, err := uc.userRepo.GetByUsername(ctx, username)
 
 	if err != nil {
@@ -213,7 +213,7 @@ func (uc *UserController) generatePassword(password string) string {
 	return <-done
 }
 
-func (uc *UserController) restartSession(ctx context.Context, userID string) (sid string, err error) {
+func (uc *UserController) restartSession(ctx context.Context, userID int) (sid string, err error) {
 	sessionInfo := ctx.Value(ctxtypes.SessionInfo).(model.SessionInfo)
 
 	sessionInfo.UserID = userID
@@ -245,7 +245,7 @@ func checkPassword(password, hash string) bool {
 func (uc *UserController) registerClient(w http.ResponseWriter, r *http.Request) (client *chat.Client) {
 	sessionInfo := r.Context().Value(ctxtypes.SessionInfo).(model.SessionInfo)
 
-	if sessionInfo.UserID == "" {
+	if sessionInfo.UserID == 0 {
 		w.WriteHeader(http.StatusUnauthorized)
 		io.WriteString(w, "User not allowed")
 		return

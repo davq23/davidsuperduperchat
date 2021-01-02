@@ -2,7 +2,7 @@ package model
 
 // User represents an user in the db
 type User struct {
-	ID       string
+	ID       int
 	Username string
 	Hash     string
 }

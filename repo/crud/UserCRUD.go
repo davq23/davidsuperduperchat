@@ -22,7 +22,7 @@ func NewUserCRUD(userPool *pgxpool.Pool) *UserCRUD {
 }
 
 // GetByID returns an User according to its ID
-func (uc *UserCRUD) GetByID(ctx context.Context, userID string) (user model.User, err error) {
+func (uc *UserCRUD) GetByID(ctx context.Context, userID int) (user model.User, err error) {
 	done := make(chan bool)
 
 	go func(c chan<- bool) {

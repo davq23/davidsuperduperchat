@@ -7,7 +7,6 @@ import (
 	"davidws/model"
 	"davidws/repo"
 	"davidws/utils"
-	"errors"
 	"net/http"
 	"net/url"
 )
@@ -44,15 +43,13 @@ func (ah AuthHandler) AuthMiddleware(next http.HandlerFunc, auth bool) http.Hand
 
 		userID, err := ah.repo.Get(r.Context(), si.GetID())
 
-		err = errors.New("AAAAAA")
-
 		if auth {
 			if err != nil {
 				w.WriteHeader(http.StatusForbidden)
 				return
 			}
 
-			si.UserID = userID.(string)
+			si.UserID = userID.(int)
 
 		} else {
 			if err == nil {

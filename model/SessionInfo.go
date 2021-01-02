@@ -9,7 +9,7 @@ import (
 // SessionInfo describes the information stored in a session
 type SessionInfo struct {
 	id       string
-	UserID   string
+	UserID   int
 	Username string
 }
 
