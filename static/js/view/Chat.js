@@ -52,10 +52,14 @@ export default class ChatView extends View {
         this.submitButton.innerText = "Send"
         this.submitButton.type = 'submit';
 
+        this.closeConMessage = document.createElement('h3');
+        this.submitButton.innerText = ""
+
         this.form.appendChild(this.messageInput);
         this.form.appendChild(this.submitButton);
         this.chatDiv.appendChild(this.chat);
         this.chatDiv.appendChild(this.form);
+        this.chatDiv.appendChild(this.closeConMessage);
         this.fragment.appendChild(this.chatDiv);
 
         return this.chatDiv;
@@ -69,11 +73,12 @@ export default class ChatView extends View {
 
             self.ws.onopen = function() {
                 this.send(JSON.stringify({body: "Hello people!!"}))
+                this.closeConMessage.innerText = ""
                 resolve()
             }
 
             self.ws.onclose = function(event) {
-                alert("closing connection")
+                this.closeConMessage.innerText = "Connection closed, please refresh to reconnect"
             }
             
             self.ws.onmessage = function(event) {
