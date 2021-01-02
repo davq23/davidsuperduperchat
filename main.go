@@ -66,7 +66,7 @@ func main() {
 		ReadTimeout:  time.Duration(time.Second * 5),
 		WriteTimeout: time.Duration(time.Second * 5),
 		IdleTimeout:  time.Duration(time.Second * 2),
-		Addr:         ":8081",
+		Addr:         ":" + config.Port,
 	}
 
 	// Log concurrently

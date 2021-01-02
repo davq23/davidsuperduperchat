@@ -11,7 +11,7 @@ import (
 
 var (
 	// Port is the listening port
-	Port = 0
+	Port = ""
 	// DBPort is the database listening Port
 	DBPort = 3306
 	// DBUser is the database user
@@ -49,6 +49,8 @@ func Load() {
 	if err != nil {
 		DBURI = os.Getenv("DATABASE_URL")
 
+		Port = os.Getenv("PORT")
+
 		SessionIDLength, err = strconv.Atoi(os.Getenv("SESSION_ID_LENGTH"))
 
 		if err != nil {
@@ -60,11 +62,11 @@ func Load() {
 
 	utils.FailIfErr(err)
 
-	Port, err = strconv.Atoi(os.Getenv("API_PORT"))
+	Port = os.Getenv("API_PORT")
 
-	if err != nil {
+	if Port != "" {
 		log.Println("Error: ", err.Error())
-		Port = 3000
+		Port = "3000"
 	}
 
 	DBPort, err = strconv.Atoi(os.Getenv("DB_PORT"))
