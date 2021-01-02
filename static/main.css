@@ -48,7 +48,7 @@ body {
     padding: 0.8rem;
     border: 1px solid gray; 
     border-radius: 0.4;
-    min-width: 70vw;
+    min-width: .50vw;
 }
 
 .form-label {
@@ -83,5 +83,11 @@ body {
     }
     to {
         opacity: 0;
+    }
+}
+
+@media(max-width: 500) {
+    .form {
+        min-width: 70vw;
     }
 }
