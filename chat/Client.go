@@ -36,7 +36,6 @@ func (c *Client) Read() {
 			break
 		}
 
-		c.Hub.Logger.LogChan <- msg
 		msg.SenderName = c.Username
 		msg.SentAt = time.Now()
 

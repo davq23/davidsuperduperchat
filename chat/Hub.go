@@ -49,7 +49,6 @@ func (h *Hub) Run(ctx context.Context) {
 		select {
 		case client := <-h.Register:
 			_, exist := h.clientAuth(ctx, client.SessionID)
-			h.Logger.LogChan <- exist
 
 			if exist {
 				h.clients[client] = true
@@ -66,8 +65,6 @@ func (h *Hub) Run(ctx context.Context) {
 			}
 		case message := <-h.Broadcast:
 			for client := range h.clients {
-				h.Logger.LogChan <- client.Username
-
 				select {
 				case client.Send <- message:
 				default:

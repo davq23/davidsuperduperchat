@@ -138,8 +138,6 @@ func (uc *UserController) Logout(w http.ResponseWriter, r *http.Request) {
 func (uc *UserController) SendMessages(w http.ResponseWriter, r *http.Request) {
 	client := uc.registerClient(w, r)
 
-	uc.hub.Logger.LogChan <- client
-
 	if client != nil {
 		uc.hub.Register <- client
 	} else {
