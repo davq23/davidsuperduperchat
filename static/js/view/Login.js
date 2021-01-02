@@ -11,12 +11,22 @@ export default class LoginView extends View {
         this.err = document.createElement('h3');
         this.err.id = 'err-login';
 
+        const usernameLabel = document.createElement('label'); 
+        usernameLabel.innerText = 'Username';
+        usernameLabel.for = 'username';
+
         this.usernameInput = document.createElement('input');
         this.usernameInput.name = 'username';
+        this.usernameInput.placeholder = 'Username';
+        
+        const passwordLabel = document.createElement('label'); 
+        passwordLabel.innerText = 'Password';
+        passwordLabel.for = 'password';
 
         this.passwordInput  = document.createElement('input');
         this.passwordInput.type = 'password';
         this.passwordInput.name = 'password';
+        this.passwordInput.placeholder = 'Password';
 
 
         this.submitButton = document.createElement('button');
@@ -25,8 +35,12 @@ export default class LoginView extends View {
 
         this.loginForm.appendChild(this.title);
         this.loginForm.appendChild(this.err);
+        this.loginForm.appendChild(usernameLabel);
         this.loginForm.appendChild(this.usernameInput);
+        this.signupForm.appendChild(document.createElement('br'));
+        this.loginForm.appendChild(passwordLabel);
         this.loginForm.appendChild(this.passwordInput);
+        this.signupForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(this.submitButton);
 
         this.fragment.appendChild(this.loginForm)
