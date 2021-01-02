@@ -5,6 +5,7 @@ export default class SignupView extends View {
     constructor(anchor) {
         super(anchor)
         this.signupForm = document.createElement('form');
+        this.signupForm.classList.add('form');
 
         this.title = document.createElement('h3');
         this.title.innerText = 'Signup'

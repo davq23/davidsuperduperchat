@@ -4,6 +4,7 @@ export default class LoginView extends View {
     constructor(anchor) {
         super(anchor)
         this.loginForm = document.createElement('form');
+        this.loginForm.classList.add('form');
 
         this.title = document.createElement('h3');
         this.title.innerText = 'Login'
