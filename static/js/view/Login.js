@@ -36,9 +36,11 @@ export default class LoginView extends View {
         this.loginForm.appendChild(this.title);
         this.loginForm.appendChild(this.err);
         this.loginForm.appendChild(usernameLabel);
+        this.loginForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(this.usernameInput);
         this.loginForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(passwordLabel);
+        this.loginForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(this.passwordInput);
         this.loginForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(this.submitButton);

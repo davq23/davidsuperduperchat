@@ -38,10 +38,12 @@ export default class SignupView extends View {
         this.signupForm.appendChild(this.title);
         this.signupForm.appendChild(this.err);
         this.signupForm.appendChild(usernameLabel);
+        this.signupForm.appendChild(document.createElement('br'));
         this.signupForm.appendChild(this.usernameInput);
         this.signupForm.appendChild(document.createElement('br'));
 
         this.signupForm.appendChild(passwordLabel);
+        this.signupForm.appendChild(document.createElement('br'));
         this.signupForm.appendChild(this.passwordInput);
         this.signupForm.appendChild(document.createElement('br'));
         this.signupForm.appendChild(this.submitButton);
