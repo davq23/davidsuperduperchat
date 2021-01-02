@@ -17,6 +17,10 @@ body {
     scroll-behavior: smooth;
 }
 
+#App {
+    align-self: center;
+}
+
 .hidden {
     display: none;
 }
@@ -35,6 +39,12 @@ body {
 .fade {
     animation: fadeout .8s;
     animation-iteration-count: infinite;
+}
+
+.form {
+    padding: 0.8rem;
+    border: 1px solid gray; 
+    border-radius: 0.4;
 }
 
 .form-label {
