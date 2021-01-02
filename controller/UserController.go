@@ -38,7 +38,7 @@ func NewUserController(userRepo repo.UserRepo, sessionRepo repo.SessionRepo, hub
 		hub:         hub,
 		expNum:      regexp.MustCompile(`[\d]`),
 		expAlpha:    regexp.MustCompile(`[A-z]`),
-		expSpecial:  regexp.MustCompile(`[@!$%^&*()_-+|~=\x60{}\[\]:";'<>?,.\/]`),
+		expSpecial:  regexp.MustCompile(`[@!$%^&*()_+|~=\x60{}\[\]:";'<>?,.\/]`),
 		upgrader: &websocket.Upgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
