@@ -58,7 +58,7 @@ func main() {
 	mux.HandleFunc("/chat", ah.AuthMiddleware(uc.SendMessages, true))
 
 	// Frontend route
-	mux.Handle("/", http.FileServer(http.Dir("../static/")))
+	mux.Handle("/", http.FileServer(http.Dir("/static")))
 
 	// Server setup
 	s := &http.Server{
