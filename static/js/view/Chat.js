@@ -72,6 +72,10 @@ export default class ChatView extends View {
                 resolve()
             }
 
+            self.ws.onclose = function(event) {
+                alert("closing connection")
+            }
+            
             self.ws.onmessage = function(event) {
                 const message = JSON.parse(event.data);
 
