@@ -62,6 +62,7 @@ document.onreadystatechange = async function() {
                 logoutButton.disabled = true;
             }
 
+            // onclick listeners
             loginButton.onclick = function() {
                 loadingView.render();
 
