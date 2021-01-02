@@ -3,6 +3,7 @@ package controller
 import (
 	"context"
 	"davidws/chat"
+	"davidws/config"
 	"davidws/ctxtypes"
 	"davidws/model"
 	"davidws/repo"
@@ -81,7 +82,7 @@ func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
 	}
 
-	http.SetCookie(w, &http.Cookie{Name: "sid", Value: url.QueryEscape(sid), Path: "/", HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true, MaxAge: 0})
+	http.SetCookie(w, &http.Cookie{Name: config.SessionIDName, Value: url.QueryEscape(sid), Path: "/", HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true, MaxAge: 0})
 }
 
 // Logout erases sessionID from DB
