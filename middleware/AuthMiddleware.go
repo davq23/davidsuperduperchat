@@ -9,6 +9,7 @@ import (
 	"davidws/utils"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 // AuthHandler is a handler for sessions
@@ -49,7 +50,13 @@ func (ah AuthHandler) AuthMiddleware(next http.HandlerFunc, auth bool) http.Hand
 				return
 			}
 
-			si.UserID = userID.(int)
+			si.UserID, err = strconv.Atoi(userID.(string))
+
+			if err != nil {
+				ah.logger.LogChan <- err.Error()
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
 
 		} else {
 			if err == nil {
