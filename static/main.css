@@ -47,7 +47,7 @@ body {
     padding: 0.8rem;
     border: 1px solid gray; 
     border-radius: 0.4;
-    justify-content: center;
+    justify-self: center;
 }
 
 .form-label {
