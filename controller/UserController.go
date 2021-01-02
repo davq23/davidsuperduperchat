@@ -19,6 +19,41 @@ import (
 	"github.com/gorilla/websocket"
 )
 
+// checkPassword checks equality between password and hash
+func checkPassword(password, hash string) bool {
+	done := make(chan bool)
+
+	go func(c chan<- bool) {
+		err := security.VerifyPassword(hash, password)
+
+		if err != nil {
+			c <- false
+			return
+		}
+
+		c <- true
+	}(done)
+
+	return <-done
+}
+
+// generatePassword generates a password for user
+func generatePassword(password string) string {
+	done := make(chan string)
+
+	go func(c chan<- string) {
+		hashbytes, err := security.Hash(password)
+
+		if err != nil {
+			c <- ""
+			return
+		}
+		c <- string(hashbytes)
+	}(done)
+
+	return <-done
+}
+
 // UserController comprises all user-related endpoints
 type UserController struct {
 	userRepo    repo.UserRepo
@@ -99,7 +134,23 @@ func (uc *UserController) Logout(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Signup manages user signup
+// SendMessages contains the main loop where messages are sent
+func (uc *UserController) SendMessages(w http.ResponseWriter, r *http.Request) {
+	client := uc.registerClient(w, r)
+
+	uc.hub.Logger.LogChan <- client
+
+	if client != nil {
+		uc.hub.Register <- client
+	} else {
+		return
+	}
+
+	go client.Read()
+	go client.Write()
+}
+
+// Signup manages user sign up process
 func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
 	form := map[string]string{
 		"username": "",
@@ -126,7 +177,7 @@ func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.Username = username
-	user.Hash = uc.generatePassword(password)
+	user.Hash = generatePassword(password)
 
 	if user.Hash == "" {
 		uc.hub.Logger.LogChan <- err.Error()
@@ -145,7 +196,7 @@ func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
 	errorHandler(w, r, "Success", 200)
 }
 
-// checkSignup checks signup prcss
+// checkSignup checks signup process
 func (uc *UserController) checkSignup(ctx context.Context, username, password string) (user model.User, msg string, err error) {
 	user, err = uc.userRepo.GetByUsername(ctx, username)
 
@@ -179,6 +230,7 @@ func (uc *UserController) checkSignup(ctx context.Context, username, password st
 	return
 }
 
+// checkUserInfo checks username and password for login
 func (uc *UserController) checkUserInfo(ctx context.Context, username, password string) (userID int, err error) {
 	user, err := uc.userRepo.GetByUsername(ctx, username)
 
@@ -198,22 +250,7 @@ func (uc *UserController) checkUserInfo(ctx context.Context, username, password 
 	return
 }
 
-func (uc *UserController) generatePassword(password string) string {
-	done := make(chan string)
-
-	go func(c chan<- string) {
-		hashbytes, err := security.Hash(password)
-
-		if err != nil {
-			c <- ""
-			return
-		}
-		c <- string(hashbytes)
-	}(done)
-
-	return <-done
-}
-
+// restartSession regenerates the sessionID registers it in session storage
 func (uc *UserController) restartSession(ctx context.Context, userID int) (sid string, err error) {
 	sessionInfo := ctx.Value(ctxtypes.SessionInfo).(model.SessionInfo)
 
@@ -223,23 +260,6 @@ func (uc *UserController) restartSession(ctx context.Context, userID int) (sid s
 	_, err = uc.sessionRepo.Set(ctx, url.QueryEscape(sid), sessionInfo.UserID, time.Duration(time.Minute*15))
 
 	return
-}
-
-func checkPassword(password, hash string) bool {
-	done := make(chan bool)
-
-	go func(c chan<- bool) {
-		err := security.VerifyPassword(hash, password)
-
-		if err != nil {
-			c <- false
-			return
-		}
-
-		c <- true
-	}(done)
-
-	return <-done
 }
 
 // registerClient registers a new user into the chat
@@ -275,20 +295,4 @@ func (uc *UserController) registerClient(w http.ResponseWriter, r *http.Request)
 	client = &chat.Client{Username: user.Username, SessionID: sid, WS: ws, Send: make(chan model.Message), Hub: uc.hub}
 
 	return
-}
-
-// SendMessages contains the main loop where messages are sent
-func (uc *UserController) SendMessages(w http.ResponseWriter, r *http.Request) {
-	client := uc.registerClient(w, r)
-
-	uc.hub.Logger.LogChan <- client
-
-	if client != nil {
-		uc.hub.Register <- client
-	} else {
-		return
-	}
-
-	go client.Read()
-	go client.Write()
 }
