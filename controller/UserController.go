@@ -36,9 +36,9 @@ func NewUserController(userRepo repo.UserRepo, sessionRepo repo.SessionRepo, hub
 		userRepo:    userRepo,
 		sessionRepo: sessionRepo,
 		hub:         hub,
-		expNum:      regexp.MustCompile(`[\d]{2,}`),
-		expAlpha:    regexp.MustCompile(`[A-z]{3,}`),
-		expSpecial:  regexp.MustCompile(`[@!$%^&*()_+|~=\x60{}\[\]:";'<>?,.\/]{3,}`),
+		expNum:      regexp.MustCompile(`[\d]`),
+		expAlpha:    regexp.MustCompile(`[A-z]`),
+		expSpecial:  regexp.MustCompile(`[@!$%^&*()_+|~=\x60{}\[\]:";'<>?,.\/]`),
 		upgrader: &websocket.Upgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
@@ -164,13 +164,13 @@ func (uc *UserController) checkSignup(ctx context.Context, username, password st
 		return
 	}
 
-	if uc.expSpecial.MatchString(username) {
+	if len(uc.expSpecial.FindAllStringIndex(username, -1)) > 0 {
 		err = errors.New("Username must not include special characters")
 		msg = "Username must not include special characters"
 		return
 	}
 
-	if !uc.expAlpha.MatchString(password) || !uc.expNum.MatchString(password) || !uc.expSpecial.MatchString(password) {
+	if len(uc.expSpecial.FindAllStringIndex(password, -1)) < 3 || len(uc.expAlpha.FindAllStringIndex(password, -1)) < 3 || len(uc.expNum.FindAllStringIndex(password, -1)) < 2 {
 		err = errors.New("Password must have at least 3 alphabetical characters, 2 numbers, and 3 special characters")
 		msg = "Password must have at least 3 alphabetical characters, 2 numbers, and 3 special characters"
 		return
