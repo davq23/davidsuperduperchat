@@ -6,10 +6,10 @@ body {
 
 
 #chat {
-    max-height: 50rem;
-    min-height: 50rem;
+    max-height: 30rem;
+    min-height: 30rem;
 
-    max-width: 50rem;
+    max-width: 30rem;
     overflow-y: scroll;    
 
     border: 1px solid gray; 
