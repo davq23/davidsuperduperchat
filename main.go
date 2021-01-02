@@ -31,8 +31,6 @@ func main() {
 	utils.FailIfErr(err)
 	defer redisClient.Close()
 
-	//var redisClient *redis.Client = nil
-
 	// Repositories for CRUD operations
 	sr := crud.NewSessionCRUD(redisClient)
 	ur := crud.NewUserCRUD(pgxPool)
