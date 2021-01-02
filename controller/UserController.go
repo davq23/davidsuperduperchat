@@ -58,6 +58,7 @@ func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&form)
 
 	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
 		errorHandler(w, r, "Invalid request", http.StatusBadRequest)
 		return
 	}
@@ -68,6 +69,7 @@ func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
 	userID, err := uc.checkUserInfo(r.Context(), username, password)
 
 	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
 		errorHandler(w, r, "Invalid Username or Password", http.StatusUnauthorized)
 		return
 	}
@@ -75,10 +77,11 @@ func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
 	sid, err := uc.restartSession(r.Context(), userID)
 
 	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
 		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
 	}
 
-	http.SetCookie(w, &http.Cookie{Name: "sid", Value: url.QueryEscape(sid), Path: "/", HttpOnly: true, Secure: true, MaxAge: 0})
+	http.SetCookie(w, &http.Cookie{Name: "sid", Value: url.QueryEscape(sid), Path: "/", HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true, MaxAge: 0})
 }
 
 // Logout erases sessionID from DB
@@ -105,6 +108,7 @@ func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&form)
 
 	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
 		errorHandler(w, r, "Invalid request", http.StatusBadRequest)
 		return
 	}
@@ -115,6 +119,7 @@ func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
 	user, msg, err := uc.checkSignup(r.Context(), username, password)
 
 	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
 		errorHandler(w, r, msg, http.StatusUnauthorized)
 		return
 	}
@@ -123,6 +128,7 @@ func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
 	user.Hash = uc.generatePassword(password)
 
 	if user.Hash == "" {
+		uc.hub.Logger.LogChan <- err.Error()
 		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
 		return
 	}
@@ -130,6 +136,7 @@ func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
 	err = uc.userRepo.Insert(r.Context(), user)
 
 	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
 		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
 		return
 	}
