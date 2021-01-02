@@ -10,6 +10,7 @@ export default class LoginView extends View {
         this.title.innerText = 'Login'
 
         this.err = document.createElement('h3');
+        this.err.classList.add('form-error');
         this.err.id = 'err-login';
 
         const usernameLabel = document.createElement('label'); 

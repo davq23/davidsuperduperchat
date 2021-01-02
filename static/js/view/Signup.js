@@ -11,6 +11,7 @@ export default class SignupView extends View {
         this.title.innerText = 'Signup'
 
         this.err = document.createElement('h3');
+        this.err.classList.add('form-error');
         this.err.id = 'err-signup';
 
         const usernameLabel = document.createElement('label'); 

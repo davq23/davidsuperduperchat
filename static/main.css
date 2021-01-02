@@ -49,6 +49,12 @@ body {
     border: 1px solid gray; 
     border-radius: 0.4;
     min-width: 50vw;
+    overflow-wrap: normal;
+}
+
+.form-error {
+    justify-self: center;
+    text-align: center;
 }
 
 .form-label {
