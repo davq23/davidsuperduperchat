@@ -73,7 +73,7 @@ export default class ChatView extends View {
 
             self.ws.onopen = function() {
                 this.send(JSON.stringify({body: "Hello people!!"}))
-                this.closeConMessage.innerText = ""
+                self.closeConMessage.innerText = ""
                 resolve()
             }
 
