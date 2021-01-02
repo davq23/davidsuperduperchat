@@ -78,7 +78,7 @@ export default class ChatView extends View {
             }
 
             self.ws.onclose = function(event) {
-                this.closeConMessage.innerText = "Connection closed, please refresh to reconnect"
+                self.closeConMessage.innerText = "Connection closed, please refresh to reconnect"
             }
             
             self.ws.onmessage = function(event) {
