@@ -4,6 +4,10 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+button {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 
 #chat {
     max-height: 30rem;
