@@ -38,6 +38,7 @@ export default class SignupView extends View {
         this.submitButton = document.createElement('button');
         this.submitButton.innerText = "Send"
         this.submitButton.type = 'submit';
+        this.submitButton.classList.add('btn-main');
 
         this.signupForm.appendChild(this.title);
         this.signupForm.appendChild(this.err);
