@@ -50,12 +50,12 @@ export default class ChatView extends View {
         this.messageInput = document.createElement("input"); 
         this.messageInput.id = "message";
         this.messageInput.placeholder = "Your message go here";
+
         this.submitButton = document.createElement('button');
-        this.submitButton.innerText = "Send"
+        this.submitButton.innerText = "Send";
         this.submitButton.type = 'submit';
 
         this.closeConMessage = document.createElement('h3');
-        this.submitButton.innerText = ""
 
         this.form.appendChild(this.messageInput);
         this.form.appendChild(this.submitButton);
