@@ -50,6 +50,7 @@ export default class ChatView extends View {
         this.messageInput = document.createElement("input"); 
         this.messageInput.id = "message";
         this.messageInput.placeholder = "Your message go here";
+        this.messageInput.autocomplete = "off"
 
         this.submitButton = document.createElement('button');
         this.submitButton.innerText = "Send";
