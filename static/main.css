@@ -43,10 +43,14 @@ button {
 
 .btn-main {
     background-color: rgb(4, 91, 157);
-    color: rgb(208, 202, 202);
-    padding: .8rem;
+    color: rgb(237, 230, 230);
+    padding: .8rem .5rem;
     border-style: none;
-    border-radius: 10 / 20;
+    border-radius: 10 / 5;
+}
+
+.btn-main:active {
+    background-color: rgb(7, 123, 211);
 }
 
 .fade {
