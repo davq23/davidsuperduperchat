@@ -61,8 +61,8 @@ func main() {
 	// Server setup
 	s := &http.Server{
 		Handler:      mux,
-		ReadTimeout:  time.Duration(time.Second * 8),
-		WriteTimeout: time.Duration(time.Second * 8),
+		ReadTimeout:  time.Duration(time.Second * 5),
+		WriteTimeout: time.Duration(time.Second * 5),
 		IdleTimeout:  time.Duration(time.Second * 4),
 		Addr:         ":" + config.Port,
 	}
