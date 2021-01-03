@@ -41,6 +41,13 @@ button {
     text-decoration: underline;
 }
 
+.btn-main {
+    background-color: rgb(4, 91, 157);
+    color: rgb(208, 202, 202);
+    padding: .4rem;
+    border-radius: 10 / 20;
+}
+
 .fade {
     animation: fadeout .8s;
     animation-iteration-count: infinite;

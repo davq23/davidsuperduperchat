@@ -39,6 +39,7 @@ export default class LoginView extends View {
         this.submitButton = document.createElement('button');
         this.submitButton.innerText = "Send"
         this.submitButton.type = 'submit';
+        this.submitButton.classList.add('btn-main');
 
         this.loginForm.appendChild(this.title);
         this.loginForm.appendChild(this.err);
