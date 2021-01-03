@@ -46,7 +46,7 @@ button {
     color: rgb(245, 237, 237);
     padding:  .5rem .8rem;
     border-style: none;
-    border-radius: 25%;
+    border-radius: 10%;
 }
 
 .btn-main:active {
