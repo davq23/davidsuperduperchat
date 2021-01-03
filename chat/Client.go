@@ -19,10 +19,20 @@ type Client struct {
 }
 
 func (c *Client) Read() {
+	defer func() {
+		c.Hub.Unregister <- c
+		c.WS.Close()
+	}()
+
+	c.WS.SetReadLimit(1024)
+	c.WS.SetReadDeadline(time.Now().Add(time.Duration(time.Minute * 3)))
+
+	c.WS.SetPongHandler(func(string) error {
+		c.WS.SetReadDeadline(time.Now().Add(time.Duration(time.Minute)))
+		return nil
+	})
 
 	for {
-		c.WS.SetReadDeadline(time.Now().Add(time.Duration(time.Minute * 5)))
-
 		// Grab the next message from the broadcast channel
 		var msg model.Message
 
@@ -46,32 +56,35 @@ func (c *Client) Read() {
 }
 
 func (c *Client) Write() {
+	defer func() {
+		c.Hub.Unregister <- c
+		c.WS.Close()
+	}()
+
 	ticker := time.NewTicker(time.Duration(1 * time.Minute))
 
 	for {
-		c.WS.SetWriteDeadline(time.Now().Add(time.Duration(time.Minute * 5)))
 
 		select {
 		case message, ok := <-c.Send:
+			c.WS.SetWriteDeadline(time.Now().Add(time.Duration(time.Minute * 5)))
+
 			if ok {
 				message.ReceivedAt = time.Now()
 				c.WS.WriteJSON(message)
 			} else {
 				c.Hub.Unregister <- c
+				return
 			}
 		case <-ticker.C:
 			c.Hub.Logger.LogChan <- "updating"
-			c.lock.Lock()
 
 			if err := c.WS.WriteMessage(websocket.PingMessage, nil); err != nil {
-				c.Hub.Unregister <- c
-				c.lock.Unlock()
 				c.Hub.Logger.LogChan <- err.Error()
 				return
 			}
 
 			c.Hub.Update <- c
-			c.lock.Unlock()
 		}
 
 	}
