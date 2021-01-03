@@ -84,11 +84,16 @@ export default class ChatView extends View {
             }
             
             self.ws.onmessage = function(event) {
+                if (self.chat.children.length > 20) {
+                    self.eraseMessages(10);
+                }
+
                 const message = JSON.parse(event.data);
 
                 const messageElement = new Message(message.sendername, message.body, message.sendat, message.receivedat);           
 
                 const node = messageElement.asHTMLNode();
+                
 
                 if (self.chat.scrollTop + self.chat.clientHeight >= self.chat.scrollHeight) {
                     self.chat.appendChild(node);        
@@ -107,6 +112,14 @@ export default class ChatView extends View {
         })
         
         
+    }
+
+    eraseMessages(msgNum) {
+        if (msgNum < this.chat.children.length) {
+            for (let i = 0; i < msgNum; i++) {
+                this.chat.removeChild(this.chat.children.item(i));
+            }
+        }
     }
 
     render() {
