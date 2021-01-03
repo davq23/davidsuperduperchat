@@ -61,7 +61,8 @@ func (c *Client) Write() {
 		c.WS.Close()
 	}()
 
-	ticker := time.NewTicker(time.Duration(1 * time.Minute))
+	tickerPing := time.NewTicker(time.Duration(1 * time.Second))
+	tickerUpdate := time.NewTicker(time.Duration(1 * time.Minute))
 
 	for {
 
@@ -76,7 +77,7 @@ func (c *Client) Write() {
 				c.Hub.Unregister <- c
 				return
 			}
-		case <-ticker.C:
+		case <-tickerUpdate.C:
 			c.Hub.Logger.LogChan <- "updating"
 
 			if err := c.WS.WriteMessage(websocket.PingMessage, nil); err != nil {
@@ -85,6 +86,11 @@ func (c *Client) Write() {
 			}
 
 			c.Hub.Update <- c
+		case <-tickerPing.C:
+			if err := c.WS.WriteMessage(websocket.PingMessage, nil); err != nil {
+				c.Hub.Logger.LogChan <- err.Error()
+				return
+			}
 		}
 
 	}
