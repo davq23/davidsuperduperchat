@@ -49,6 +49,7 @@ body {
     border: 1px solid gray; 
     border-radius: 0.4;
     min-width: 50vw;
+    max-width: 50vw;
     overflow-wrap: normal;
 }
 
@@ -94,6 +95,7 @@ body {
 
 @media(max-width: 500) {
     .form {
+        max-width: 70vw;
         min-width: 70vw;
     }
 }
