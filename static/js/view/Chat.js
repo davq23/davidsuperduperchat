@@ -42,6 +42,8 @@ export default class ChatView extends View {
     // formHTML initializes chat HTML elements
     formHTML() {
         this.chatDiv = document.createElement("div");
+        this.chatDiv.id = "chat-div";
+        
         this.chat = document.createElement("div");
         this.chat.id = "chat";
         

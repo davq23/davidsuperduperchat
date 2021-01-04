@@ -8,12 +8,18 @@ button {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+#chat-div {
+    max-width: 50vw;    
+    min-width: 50vw;    
+}
+
 
 #chat {
     max-height: 30rem;
     min-height: 30rem;
 
-    max-width: 30rem;
+    max-width: 100%;
+
     overflow-y: scroll;    
 
     border: 1px solid gray; 
@@ -109,6 +115,11 @@ button {
 }
 
 @media(max-width: 500) {
+    #chat-div {
+        max-width: 70vw;
+        min-width: 70vw;
+    }
+    
     .form {
         max-width: 70vw;
         min-width: 70vw;
