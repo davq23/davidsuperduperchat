@@ -108,6 +108,7 @@ button {
     background-color: bisque;
     min-height: 5vh;
 }
+
 .message{
     padding: 0.2rem;
     margin: 1rem 0.2rem;
@@ -115,6 +116,11 @@ button {
     border-radius: 0.4;
     color: rgb(30, 31, 31);
     background-color: rgb(20, 242, 27);
+    animation: appear-message 0.5s;
+}
+
+.meta {
+    font-size: 0.9rem;
 }
 
 @keyframes fadeout {
@@ -123,6 +129,14 @@ button {
     }
     to {
         opacity: 0;
+    }
+}
+@keyframes appear-message {
+    from {
+        margin-right: 20vw;
+    }
+    to {
+        margin-right: 0vw
     }
 }
 

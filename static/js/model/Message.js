@@ -14,15 +14,20 @@ export default class Message {
 
         const sentAt = document.createElement("i");
         sentAt.innerText = `Sent at ${this.sendAt}`;
+        sentAt.classList.add("meta");
 
         const sender = document.createElement("b");
         sender.innerText = this.senderName;
+        
 
         const body = document.createElement("p");
         body.innerText = this.body;
+        
 
         const recAt = document.createElement("i");
         recAt.innerText = `Received at ${this.receivedAt}`;
+        recAt.classList.add("meta");
+
 
         messageElement.appendChild(sender);
         messageElement.appendChild(document.createElement('br'));
