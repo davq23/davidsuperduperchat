@@ -43,6 +43,7 @@ export default class ChatView extends View {
     formHTML() {
         this.chatDiv = document.createElement("div");
         this.chatDiv.id = "chat-div";
+        this.chatDiv.classList.add('flex-column');
         
         this.chat = document.createElement("div");
         this.chat.id = "chat";
@@ -52,7 +53,7 @@ export default class ChatView extends View {
         this.messageInput = document.createElement("input"); 
         this.messageInput.id = "message";
         this.messageInput.placeholder = "Your message go here";
-        this.messageInput.autocomplete = "off"
+        this.messageInput.autocomplete = "off";
 
         this.submitButton = document.createElement('button');
         this.submitButton.innerText = "Send";
