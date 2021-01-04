@@ -9,8 +9,8 @@ button {
 }
 
 #chat-div {
-    max-width: 100vw;    
-    min-width: 100vw;    
+    max-width: 90vw;    
+    min-width: 90vw;    
 }
 
 
@@ -128,8 +128,8 @@ button {
 
 @media(max-width: 500) {
     #chat-div {
-        max-width: 100vw;
-        min-width: 100vw;
+        max-width: 95vw;
+        min-width: 95vw;
     }
 
     .form {
