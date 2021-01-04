@@ -17,7 +17,7 @@ button {
     overflow-y: scroll;    
 
     border: 1px solid gray; 
-    background-color: aquamarine;
+    background-color: white;
     scroll-behavior: smooth;
 }
 
@@ -95,7 +95,8 @@ button {
     margin: 1rem 0.2rem;
     border: 1px solid gray; 
     border-radius: 0.4;
-    background-color: white;
+    color: rgb(30, 31, 31);
+    background-color: rgb(56, 235, 62);
 }
 
 @keyframes fadeout {
