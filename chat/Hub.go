@@ -47,6 +47,7 @@ func NewHub(repo repo.SessionRepo, logger *utils.Logger) *Hub {
 func (h *Hub) Run(ctx context.Context) {
 	for {
 		select {
+		// Register client
 		case client := <-h.Register:
 			_, exist := h.clientAuth(ctx, client.SessionID)
 
@@ -56,13 +57,16 @@ func (h *Hub) Run(ctx context.Context) {
 				close(client.Send)
 				client.WS.Close()
 			}
+		// Unregister client
 		case client := <-h.Unregister:
 			if _, ok := h.clients[client]; ok {
 				h.Logger.LogChan <- "Unregistering " + client.Username
+
 				delete(h.clients, client)
 				close(client.Send)
 				client.WS.Close()
 			}
+		// Broadcast message to clients
 		case message := <-h.Broadcast:
 			for client := range h.clients {
 				select {
@@ -72,6 +76,7 @@ func (h *Hub) Run(ctx context.Context) {
 					delete(h.clients, client)
 				}
 			}
+		// Update session back to 15 minute expiration
 		case c := <-h.Update:
 			err := h.repo.UpdateExpire(context.Background(), c.SessionID, time.Duration(15*time.Minute))
 
@@ -83,6 +88,7 @@ func (h *Hub) Run(ctx context.Context) {
 	}
 }
 
+// clientAuth performs fetches session before registering
 func (h *Hub) clientAuth(ctx context.Context, sessionID string) (userID string, ok bool) {
 	userIDInterface, err := h.repo.Get(ctx, sessionID)
 

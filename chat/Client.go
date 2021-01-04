@@ -19,16 +19,17 @@ type Client struct {
 }
 
 func (c *Client) Read() {
+	// Client clean up
 	defer func() {
 		c.Hub.Unregister <- c
 		c.WS.Close()
 	}()
 
 	c.WS.SetReadLimit(1024)
-	c.WS.SetReadDeadline(time.Now().Add(time.Duration(time.Minute * 3)))
+	c.WS.SetReadDeadline(time.Now().Add(time.Duration(time.Second * 15)))
 
 	c.WS.SetPongHandler(func(string) error {
-		c.WS.SetReadDeadline(time.Now().Add(time.Duration(time.Minute)))
+		c.WS.SetReadDeadline(time.Now().Add(time.Duration(time.Second * 15)))
 		return nil
 	})
 
@@ -56,6 +57,7 @@ func (c *Client) Read() {
 }
 
 func (c *Client) Write() {
+	// Client clean up
 	defer func() {
 		c.Hub.Unregister <- c
 		c.WS.Close()
@@ -65,10 +67,11 @@ func (c *Client) Write() {
 	tickerUpdate := time.NewTicker(time.Duration(1 * time.Minute))
 
 	for {
+		c.WS.SetWriteDeadline(time.Now().Add(time.Duration(time.Second * 15)))
 
 		select {
+		// Received messages
 		case message, ok := <-c.Send:
-			c.WS.SetWriteDeadline(time.Now().Add(time.Duration(time.Minute * 5)))
 
 			if ok {
 				message.ReceivedAt = time.Now()
@@ -77,8 +80,9 @@ func (c *Client) Write() {
 				c.Hub.Unregister <- c
 				return
 			}
+		// Check update ticker
 		case <-tickerUpdate.C:
-			c.Hub.Logger.LogChan <- "updating"
+			c.Hub.Logger.LogChan <- "updating " + c.Username
 
 			if err := c.WS.WriteMessage(websocket.PingMessage, nil); err != nil {
 				c.Hub.Logger.LogChan <- err.Error()
@@ -86,6 +90,7 @@ func (c *Client) Write() {
 			}
 
 			c.Hub.Update <- c
+		// Check keep alive ticker
 		case <-tickerPing.C:
 			if err := c.WS.WriteMessage(websocket.PingMessage, nil); err != nil {
 				c.Hub.Logger.LogChan <- err.Error()
