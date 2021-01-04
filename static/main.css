@@ -19,6 +19,7 @@ button {
     min-height: 30rem;
 
     max-width: 100%;
+    min-width: 100%;
 
     overflow-y: scroll;    
 
@@ -26,6 +27,13 @@ button {
     background-color: white;
     scroll-behavior: smooth;
 }
+
+#message-form {
+    max-width: 100%;
+    min-width: 100%;
+}
+
+
 
 #App {
     margin-top: 1rem;
@@ -102,7 +110,7 @@ button {
     border: 1px solid gray; 
     border-radius: 0.4;
     color: rgb(30, 31, 31);
-    background-color: rgb(56, 235, 62);
+    background-color: rgb(20, 242, 27);
 }
 
 @keyframes fadeout {
@@ -116,10 +124,10 @@ button {
 
 @media(max-width: 500) {
     #chat-div {
-        max-width: 70vw;
-        min-width: 70vw;
+        max-width: 90vw;
+        min-width: 90vw;
     }
-    
+
     .form {
         max-width: 70vw;
         min-width: 70vw;
