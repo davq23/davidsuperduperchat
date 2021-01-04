@@ -9,8 +9,8 @@ button {
 }
 
 #chat-div {
-    max-width: 50vw;    
-    min-width: 50vw;    
+    max-width: 100vw;    
+    min-width: 100vw;    
 }
 
 
@@ -28,7 +28,7 @@ button {
     scroll-behavior: smooth;
 }
 
-#message-form {
+#message-form, #message-form > input,  #message-form > button {
     max-width: 100%;
     min-width: 100%;
 }
