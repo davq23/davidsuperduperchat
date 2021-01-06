@@ -110,7 +110,7 @@ func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sid, err := uc.restartSession(r.Context(), userID)
+	sid, err := uc.restartSession(r.Context(), userID, username)
 
 	if err != nil {
 		uc.hub.Logger.LogChan <- err.Error()
@@ -249,13 +249,15 @@ func (uc *UserController) checkUserInfo(ctx context.Context, username, password 
 }
 
 // restartSession regenerates the sessionID registers it in session storage
-func (uc *UserController) restartSession(ctx context.Context, userID int) (sid string, err error) {
+func (uc *UserController) restartSession(ctx context.Context, userID int, username string) (sid string, err error) {
 	sessionInfo := ctx.Value(ctxtypes.SessionInfo).(model.SessionInfo)
 
+	sessionInfo.Username = username
 	sessionInfo.UserID = userID
+
 	sid = sessionInfo.GenerateID(88)
 
-	_, err = uc.sessionRepo.Set(ctx, url.QueryEscape(sid), sessionInfo.UserID, time.Duration(time.Minute*15))
+	_, err = uc.sessionRepo.Set(ctx, url.QueryEscape(sid), sessionInfo.String(), time.Duration(time.Minute*15))
 
 	return
 }
@@ -264,23 +266,11 @@ func (uc *UserController) restartSession(ctx context.Context, userID int) (sid s
 func (uc *UserController) registerClient(w http.ResponseWriter, r *http.Request) (client *chat.Client) {
 	sessionInfo := r.Context().Value(ctxtypes.SessionInfo).(model.SessionInfo)
 
-	uc.hub.Logger.LogChan <- sessionInfo
-
 	if sessionInfo.UserID == 0 {
 		w.WriteHeader(http.StatusUnauthorized)
 		io.WriteString(w, "User not allowed")
 		return
 	}
-
-	user, err := uc.userRepo.GetByID(r.Context(), sessionInfo.UserID)
-
-	if err != nil {
-		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
-		return
-	}
-
-	sid := sessionInfo.GetID()
 
 	ws, err := uc.upgrader.Upgrade(w, r, nil)
 
@@ -290,7 +280,7 @@ func (uc *UserController) registerClient(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	client = &chat.Client{Username: user.Username, SessionID: sid, WS: ws, Send: make(chan model.Message), Hub: uc.hub}
+	client = &chat.Client{Username: sessionInfo.Username, SessionID: sessionInfo.GetID(), WS: ws, Send: make(chan model.Message), Hub: uc.hub}
 
 	return
 }

@@ -3,7 +3,11 @@ package model
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
+	"fmt"
 	"io"
+	"strconv"
+	"strings"
 )
 
 // SessionInfo describes the information stored in a session
@@ -34,4 +38,23 @@ func (si *SessionInfo) GetID() string {
 // SetID sets the session ID
 func (si *SessionInfo) SetID(sid string) {
 	si.id = sid
+}
+
+func (si SessionInfo) String() string {
+	return fmt.Sprintf("%d;%s", si.UserID, si.Username)
+}
+
+// Parse parses sessionInfo from string
+func (si *SessionInfo) Parse(info string) (err error) {
+	infoArray := strings.Split(info, ";")
+
+	if len(infoArray) != 2 {
+		err = errors.New("Incorrect session data")
+		return
+	}
+
+	si.UserID, err = strconv.Atoi(infoArray[0])
+	si.Username = infoArray[1]
+
+	return
 }

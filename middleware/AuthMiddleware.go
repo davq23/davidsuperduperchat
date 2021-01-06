@@ -9,7 +9,6 @@ import (
 	"davidws/utils"
 	"net/http"
 	"net/url"
-	"strconv"
 )
 
 // AuthHandler is a handler for sessions
@@ -42,7 +41,7 @@ func (ah AuthHandler) AuthMiddleware(next http.HandlerFunc, auth bool) http.Hand
 			si.SetID(c.Value)
 		}
 
-		userID, err := ah.repo.Get(r.Context(), si.GetID())
+		sessionData, err := ah.repo.Get(r.Context(), si.GetID())
 
 		if auth {
 			if err != nil {
@@ -50,7 +49,7 @@ func (ah AuthHandler) AuthMiddleware(next http.HandlerFunc, auth bool) http.Hand
 				return
 			}
 
-			si.UserID, err = strconv.Atoi(userID.(string))
+			err = si.Parse(sessionData.(string))
 
 			if err != nil {
 				ah.logger.LogChan <- err.Error()
