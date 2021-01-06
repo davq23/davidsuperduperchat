@@ -20,7 +20,7 @@ document.onreadystatechange = async function() {
         const loadingView = new LoadingView(AppDiv);
         let chatView = null;
 
-        AppDiv.addEventListener('change-nav', function(event) {
+        window.addEventListener('change-nav', function(event) {
             if (event.chat) {
                 loginButton.disabled = false;
                 signupButton.disabled = false;
@@ -63,8 +63,6 @@ document.onreadystatechange = async function() {
                  // If successful, render chat and hide buttons
                 chatView.render();
 
-               
-
             } catch(err) {
                 console.log(err);
 
@@ -94,10 +92,10 @@ document.onreadystatechange = async function() {
 
                 loginView.render();
 
-                AppDiv.dispatchEvent(new CustomEvent("change-nav", {chat: false}));
+                window.dispatchEvent(new CustomEvent("change-nav", {chat: false}));
             }
 
-            AppDiv.dispatchEvent(evt);
+            window.dispatchEvent(evt);
         });
 
         const event = new Event('chat');
