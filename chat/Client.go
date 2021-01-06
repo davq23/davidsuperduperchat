@@ -53,8 +53,9 @@ func (c *Client) Read() {
 			// Send the newly received message to the broadcast channel
 			c.Hub.Broadcast <- msg
 		case model.MessageLogout:
+			c.Hub.Logger.LogChan <- c.SessionID
 			_, err = c.Hub.repo.Delete(context.Background(), c.SessionID)
-			break
+			return
 		}
 	}
 
