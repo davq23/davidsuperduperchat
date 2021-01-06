@@ -20,26 +20,20 @@ document.onreadystatechange = async function() {
         const loadingView = new LoadingView(AppDiv);
         let chatView = null;
 
-        window.addEventListener('change-nav', function(event) {
+        window.addEventListener('change-nav', function(event) {       
+            loginButton.disabled = event.detail;
+            signupButton.disabled = event.detail;
+            logoutButton.disabled = !event.detail;
 
             if (event.detail) {
-                loginButton.disabled = false;
-                signupButton.disabled = false;
-                logoutButton.disabled = true;
-
+                loginButton.classList.add('hidden');                
+                signupButton.classList.add('hidden');  
+                logoutButton.classList.remove('hidden');
+            } else {
                 loginButton.classList.remove('hidden');                
                 signupButton.classList.remove('hidden');  
                 logoutButton.classList.add('hidden');
-                
-            } else {
-                loginButton.disabled = true;
-                signupButton.disabled = true;
-                logoutButton.disabled = false;
-
-                loginButton.classList.add('hidden');                
-                signupButton.classList.add('hidden');
-                logoutButton.classList.remove('hidden');      
-            }      
+            }
         }, false);  
 
         // App events
