@@ -84,114 +84,24 @@ func NewUserController(userRepo repo.UserRepo, sessionRepo repo.SessionRepo, hub
 	}
 }
 
-// Login controls user login operations
-func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
-	form := map[string]string{
-		"username": "",
-		"password": "",
-	}
-
-	err := json.NewDecoder(r.Body).Decode(&form)
+// checkLogin checks username and password for login
+func (uc *UserController) checkLogin(ctx context.Context, username, password string) (userID int, err error) {
+	user, err := uc.userRepo.GetByUsername(ctx, username)
 
 	if err != nil {
-		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, "Invalid request", http.StatusBadRequest)
+
 		return
 	}
 
-	username, _ := form["username"]
-	password, _ := form["password"]
+	same := checkPassword(password, user.Hash)
 
-	userID, err := uc.checkUserInfo(r.Context(), username, password)
-
-	if err != nil {
-		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, "Invalid Username or Password", http.StatusUnauthorized)
-		return
-	}
-
-	sid, err := uc.restartSession(r.Context(), userID, username)
-
-	if err != nil {
-		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
-	}
-
-	http.SetCookie(w, &http.Cookie{Name: config.SessionIDName, Value: url.QueryEscape(sid), Path: "/", HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true, MaxAge: 0})
-}
-
-// Logout erases sessionID from DB
-func (uc *UserController) Logout(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	sessionInfo := ctx.Value(ctxtypes.SessionInfo).(model.SessionInfo)
-
-	_, err := uc.sessionRepo.Delete(ctx, sessionInfo.GetID())
-
-	if err != nil {
-		uc.hub.Logger.LogChan <- err.Error()
-		w.WriteHeader(http.StatusInternalServerError)
-	}
-}
-
-// SendMessages contains the main loop where messages are sent
-func (uc *UserController) SendMessages(w http.ResponseWriter, r *http.Request) {
-	client := uc.registerClient(w, r)
-
-	if client != nil {
-		uc.hub.Register <- client
+	if !same {
+		err = errors.New("Hashes don't match")
 	} else {
-		return
+		userID = user.ID
 	}
 
-	go client.Read()
-	go client.Write()
-}
-
-// Signup manages user sign up process
-func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
-	form := map[string]string{
-		"username": "",
-		"password": "",
-	}
-
-	err := json.NewDecoder(r.Body).Decode(&form)
-
-	if err != nil {
-		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, "Invalid request", http.StatusBadRequest)
-		return
-	}
-
-	username, _ := form["username"]
-	password, _ := form["password"]
-
-	user, msg, err := uc.checkSignup(r.Context(), username, password)
-
-	if err != nil {
-		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, msg, http.StatusUnauthorized)
-		return
-	}
-
-	user.Username = username
-	user.Hash = generatePassword(password)
-
-	if user.Hash == "" {
-		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
-		return
-	}
-
-	err = uc.userRepo.Insert(r.Context(), user)
-
-	if err != nil {
-		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
-		return
-	}
-
-	errorHandler(w, r, "Success", 200)
+	return
 }
 
 // checkSignup checks signup process
@@ -225,25 +135,86 @@ func (uc *UserController) checkSignup(ctx context.Context, username, password st
 		return
 	}
 
-	return
-}
+	user.Hash = generatePassword(password)
 
-// checkUserInfo checks username and password for login
-func (uc *UserController) checkUserInfo(ctx context.Context, username, password string) (userID int, err error) {
-	user, err := uc.userRepo.GetByUsername(ctx, username)
-
-	if err != nil {
-
+	if user.Hash == "" {
+		err = errors.New("Hashing process failed")
+		msg = "Unknown error"
 		return
 	}
 
-	same := checkPassword(password, user.Hash)
+	return
+}
 
-	if !same {
-		err = errors.New("Hashes don't match")
-	} else {
-		userID = user.ID
+// Login controls user login operations
+func (uc *UserController) Login(w http.ResponseWriter, r *http.Request) {
+	form := map[string]string{
+		"username": "",
+		"password": "",
 	}
+
+	err := json.NewDecoder(r.Body).Decode(&form)
+
+	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
+		sendMsgHandler(w, r, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	username, _ := form["username"]
+	password, _ := form["password"]
+
+	userID, err := uc.checkLogin(r.Context(), username, password)
+
+	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
+		sendMsgHandler(w, r, "Invalid Username or Password", http.StatusUnauthorized)
+		return
+	}
+
+	sid, err := uc.restartSession(r.Context(), userID, username)
+
+	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
+		sendMsgHandler(w, r, "Unknown error", http.StatusInternalServerError)
+	}
+
+	http.SetCookie(w, &http.Cookie{Name: config.SessionIDName, Value: url.QueryEscape(sid), Path: "/", HttpOnly: true, SameSite: http.SameSiteStrictMode, Secure: true, MaxAge: 0})
+}
+
+// Logout erases sessionID from DB
+func (uc *UserController) Logout(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	sessionInfo := ctx.Value(ctxtypes.SessionInfo).(model.SessionInfo)
+
+	_, err := uc.sessionRepo.Delete(ctx, sessionInfo.GetID())
+
+	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
+		w.WriteHeader(http.StatusInternalServerError)
+	}
+}
+
+// registerClient registers a new user into the chat
+func (uc *UserController) registerClient(w http.ResponseWriter, r *http.Request) (client *chat.Client) {
+	sessionInfo := r.Context().Value(ctxtypes.SessionInfo).(model.SessionInfo)
+
+	if sessionInfo.UserID == 0 {
+		w.WriteHeader(http.StatusUnauthorized)
+		io.WriteString(w, "User not allowed")
+		return
+	}
+
+	ws, err := uc.upgrader.Upgrade(w, r, nil)
+
+	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
+		sendMsgHandler(w, r, "Unknown error", http.StatusInternalServerError)
+		return
+	}
+
+	client = &chat.Client{Username: sessionInfo.Username, SessionID: sessionInfo.GetID(), WS: ws, Send: make(chan model.Message), Hub: uc.hub}
 
 	return
 }
@@ -262,25 +233,53 @@ func (uc *UserController) restartSession(ctx context.Context, userID int, userna
 	return
 }
 
-// registerClient registers a new user into the chat
-func (uc *UserController) registerClient(w http.ResponseWriter, r *http.Request) (client *chat.Client) {
-	sessionInfo := r.Context().Value(ctxtypes.SessionInfo).(model.SessionInfo)
+// SendMessages contains the main loop where messages are sent
+func (uc *UserController) SendMessages(w http.ResponseWriter, r *http.Request) {
+	client := uc.registerClient(w, r)
 
-	if sessionInfo.UserID == 0 {
-		w.WriteHeader(http.StatusUnauthorized)
-		io.WriteString(w, "User not allowed")
+	if client != nil {
+		uc.hub.Register <- client
+	} else {
 		return
 	}
 
-	ws, err := uc.upgrader.Upgrade(w, r, nil)
+	go client.Read()
+	go client.Write()
+}
+
+// Signup manages user sign up process
+func (uc *UserController) Signup(w http.ResponseWriter, r *http.Request) {
+	form := map[string]string{
+		"username": "",
+		"password": "",
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&form)
 
 	if err != nil {
 		uc.hub.Logger.LogChan <- err.Error()
-		errorHandler(w, r, "Unknown error", http.StatusInternalServerError)
+		sendMsgHandler(w, r, "Invalid request", http.StatusBadRequest)
 		return
 	}
 
-	client = &chat.Client{Username: sessionInfo.Username, SessionID: sessionInfo.GetID(), WS: ws, Send: make(chan model.Message), Hub: uc.hub}
+	username, _ := form["username"]
+	password, _ := form["password"]
 
-	return
+	user, msg, err := uc.checkSignup(r.Context(), username, password)
+
+	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
+		sendMsgHandler(w, r, msg, http.StatusUnauthorized)
+		return
+	}
+
+	err = uc.userRepo.Insert(r.Context(), user)
+
+	if err != nil {
+		uc.hub.Logger.LogChan <- err.Error()
+		sendMsgHandler(w, r, "Unknown error", http.StatusInternalServerError)
+		return
+	}
+
+	sendMsgHandler(w, r, "Success", 200)
 }
