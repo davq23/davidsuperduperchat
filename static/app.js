@@ -57,7 +57,7 @@ document.onreadystatechange = async function() {
                 // Try to open websocket
                 chatView = new ChatView(AppDiv);
 
-                evt = new CustomEvent("NavChange", {chat: true});
+                evt = new CustomEvent("change-nav", {chat: true});
 
                 await chatView.initConnection()
     
@@ -69,7 +69,7 @@ document.onreadystatechange = async function() {
             } catch(err) {
                 console.log(err);
 
-                evt = new CustomEvent("NavChange", {chat: false});
+                evt = new CustomEvent("change-nav", {chat: false});
 
                 // Render login and load buttons
                 loginView.render();
@@ -95,7 +95,7 @@ document.onreadystatechange = async function() {
 
                 loginView.render();
 
-                AppDiv.dispatchEvent(new CustomEvent("NavChange", {chat: false}));
+                AppDiv.dispatchEvent(new CustomEvent("change-nav", {chat: false}));
             }
 
             AppDiv.dispatchEvent(evt);
