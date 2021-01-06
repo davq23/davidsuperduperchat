@@ -53,8 +53,17 @@ func (c *Client) Read() {
 			// Send the newly received message to the broadcast channel
 			c.Hub.Broadcast <- msg
 		case model.MessageLogout:
-			c.Hub.Logger.LogChan <- c.SessionID
 			_, err = c.Hub.repo.Delete(context.Background(), c.SessionID)
+
+			if err != nil {
+				c.Hub.Logger.LogChan <- err.Error()
+			} else {
+				msg.Type = 0
+				msg.Body = c.Username + " has left the chat."
+				msg.SenderName = "System"
+				c.Hub.Broadcast <- msg
+			}
+
 			return
 		}
 	}
