@@ -60,7 +60,6 @@ func (c *Client) Read() {
 			} else {
 				msg.Type = 0
 				msg.Body = c.Username + " has left the chat."
-				msg.SenderName = "System"
 				c.Hub.Broadcast <- msg
 			}
 
