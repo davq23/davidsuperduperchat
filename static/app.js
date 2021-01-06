@@ -21,9 +21,8 @@ document.onreadystatechange = async function() {
         let chatView = null;
 
         window.addEventListener('change-nav', function(event) {
-            console.log(event);
 
-            if (event.chat) {
+            if (event.detail) {
                 loginButton.disabled = false;
                 signupButton.disabled = false;
                 logoutButton.disabled = true;
@@ -60,7 +59,7 @@ document.onreadystatechange = async function() {
 
                 await chatView.initConnection()
 
-                evt = new CustomEvent("change-nav", {chat: true});
+                evt = new CustomEvent("change-nav", {detail: true});
     
                  // If successful, render chat and hide buttons
                 chatView.render();
@@ -68,7 +67,7 @@ document.onreadystatechange = async function() {
             } catch(err) {
                 console.log(err);
 
-                evt = new CustomEvent("change-nav", {chat: false});
+                evt = new CustomEvent("change-nav", {detail: false});
 
                 // Render login and load buttons
                 loginView.render();
@@ -94,7 +93,7 @@ document.onreadystatechange = async function() {
 
                 loginView.render();
 
-                window.dispatchEvent(new CustomEvent("change-nav", {chat: false}));
+                window.dispatchEvent(new CustomEvent("change-nav", {detail: false}));
             }
 
             window.dispatchEvent(evt);
