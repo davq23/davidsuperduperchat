@@ -21,7 +21,6 @@ document.onreadystatechange = async function() {
         let chatView = null;
 
         AppDiv.addEventListener('change-nav', function(event) {
-            event.preventDefault();
             if (event.chat) {
                 loginButton.disabled = false;
                 signupButton.disabled = false;
@@ -40,7 +39,7 @@ document.onreadystatechange = async function() {
                 signupButton.classList.add('hidden');
                 logoutButton.classList.remove('hidden');      
             }      
-        });  
+        }, false);  
 
         // App events
         AppDiv.addEventListener('loading-', function(event) {
@@ -57,9 +56,9 @@ document.onreadystatechange = async function() {
                 // Try to open websocket
                 chatView = new ChatView(AppDiv);
 
-                evt = new CustomEvent("change-nav", {chat: true});
-
                 await chatView.initConnection()
+
+                evt = new CustomEvent("change-nav", {chat: true});
     
                  // If successful, render chat and hide buttons
                 chatView.render();
