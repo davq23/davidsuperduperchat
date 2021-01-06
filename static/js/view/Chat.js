@@ -119,6 +119,10 @@ export default class ChatView extends View {
         
     }
 
+    async logout() {
+        await this.ws.send(JSON.stringify({body: "Goodbye", type: -1}))
+    }
+
     eraseMessages(msgNum) {
         if (msgNum < this.chat.children.length) {
             for (let i = 0; i < msgNum; i++) {

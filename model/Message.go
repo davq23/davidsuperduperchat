@@ -14,9 +14,9 @@ const (
 
 // Message represents the messages exchanged between clients
 type Message struct {
-	SenderName string    `json:"sendername,omitempty"`
-	Body       string    `json:"body"`
-	Type       int       `json:"type,omitempty"`
-	SentAt     time.Time `json:"sendat,omitempty"`
-	ReceivedAt time.Time `json:"receivedat,omitempty"`
+	SenderName string      `json:"sendername,omitempty"`
+	Body       string      `json:"body"`
+	Type       MessageType `json:"type,omitempty"`
+	SentAt     time.Time   `json:"sendat,omitempty"`
+	ReceivedAt time.Time   `json:"receivedat,omitempty"`
 }

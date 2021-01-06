@@ -1,6 +1,7 @@
 package chat
 
 import (
+	"context"
 	"davidws/model"
 	"sync"
 	"time"
@@ -41,17 +42,20 @@ func (c *Client) Read() {
 		err := c.WS.ReadJSON(&msg)
 
 		if err != nil {
-			c.lock.Lock()
-			c.Hub.Unregister <- c
-			c.lock.Unlock()
 			break
 		}
 
 		msg.SenderName = c.Username
 		msg.SentAt = time.Now()
 
-		// Send the newly received message to the broadcast channel
-		c.Hub.Broadcast <- msg
+		switch msg.Type {
+		case model.MessageText:
+			// Send the newly received message to the broadcast channel
+			c.Hub.Broadcast <- msg
+		case model.MessageLogout:
+			_, err = c.Hub.repo.Delete(context.Background(), c.SessionID)
+			break
+		}
 	}
 
 }
