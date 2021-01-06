@@ -21,6 +21,8 @@ document.onreadystatechange = async function() {
         let chatView = null;
 
         window.addEventListener('change-nav', function(event) {
+            console.log(event);
+
             if (event.chat) {
                 loginButton.disabled = false;
                 signupButton.disabled = false;
