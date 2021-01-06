@@ -51,9 +51,9 @@ func main() {
 
 	// Backend routes
 	mux.HandleFunc("/login", middleware.MethodMiddleware(ah.AuthMiddleware(uc.Login, false), http.MethodPost))
-	mux.HandleFunc("/logout", middleware.MethodMiddleware(ah.AuthMiddleware(uc.Logout, true), http.MethodPost))
+	// mux.HandleFunc("/logout", middleware.MethodMiddleware(ah.AuthMiddleware(uc.Logout, true), http.MethodPost))
 	mux.HandleFunc("/signup", middleware.MethodMiddleware(ah.AuthMiddleware(uc.Signup, false), http.MethodPost))
-	mux.HandleFunc("/chat", ah.AuthMiddleware(uc.SendMessages, true))
+	mux.HandleFunc("/chat", middleware.MethodMiddleware(ah.AuthMiddleware(uc.SendMessages, true), http.MethodGet))
 
 	// Frontend route
 	mux.Handle("/", http.FileServer(http.Dir("./static")))
