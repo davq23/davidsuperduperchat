@@ -91,9 +91,11 @@ document.onreadystatechange = async function() {
             logoutButton.onclick = async function() {
                 loadingView.render();
 
-                await chatView.logout()
-                
-                loginView.render()
+                await chatView.logout();
+
+                loginView.render();
+
+                AppDiv.dispatchEvent(new CustomEvent("NavChange", {chat: false}));
             }
 
             AppDiv.dispatchEvent(evt);
