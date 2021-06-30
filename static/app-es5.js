@@ -101,10 +101,10 @@ document.onreadystatechange = function () {
 
 
 
-                break;
-
+                
             });
-    }
+            break;
+        }
 }
 
 
