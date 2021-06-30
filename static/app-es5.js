@@ -318,9 +318,9 @@ App.Models.Message.asHTMLNode = function () {
     return messageElement;
 }
 
-David.Utils.inherit(App.Views.Chat, App.Views.View);
-David.Utils.inherit(App.Views.SignupForm, App.Views.View);
-David.Utils.inherit(App.Views.LoginForm, App.Views.View);
+App.Utils.inherit(App.Views.Chat, App.Views.View);
+App.Utils.inherit(App.Views.SignupForm, App.Views.View);
+App.Utils.inherit(App.Views.LoginForm, App.Views.View);
 
 App.Views.View.render = function () {
     this.anchor.innerText = '';
