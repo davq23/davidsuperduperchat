@@ -28,12 +28,32 @@ button {
     scroll-behavior: smooth;
 }
 
+#logo {
+    margin: 0;
+    padding: 0;
+}
+
+#logout-button {
+    background-color: rgb(250, 45, 45);
+}
+#logout-button:active {
+    background-color: rgb(241, 19, 19);
+}
+#signup-button {
+    background-color: rgb(33, 157, 206);
+}
+#signup-button:active {
+    background-color: rgb(16, 106, 141);
+}
+
 #message-form, #message-form > input,  #message-form > button {
     max-width: 100%;
     min-width: 100%;
 }
 
-
+#nav {
+    width: 50%;
+}
 
 #App {
     margin-top: 1rem;
@@ -114,13 +134,14 @@ button {
 
 .nav {
     margin: 0;
+    padding: 0;
     display: flex;
     align-items: baseline;
     list-style: none;
     justify-content: space-between;
     background-color: rgb(134, 215, 247);
     color: rgb(255, 255, 255);
-    min-height: 5vh;
+    min-height: 2rem;
     flex-wrap: wrap;
 }
 
@@ -168,5 +189,9 @@ button {
     .form {
         max-width: 70vw;
         min-width: 70vw;
+    }
+
+    #nav {
+        width: 100%;
     }
 }
