@@ -56,12 +56,14 @@ export default class SignupView extends View {
         const err = cloneFragment.getElementById('err-signup');
         const anchor = this.anchor;
 
+        const submitButton = this.submitButton;
+
         cloneFragment.lastChild.onsubmit = async function(event) {
             event.preventDefault();
 
             err.innerHTML = `<h3 class="fade">Loading...</h3>`;
 
-            anchor.querySelector('button').disabled = true;
+            submitButton.disabled = true;
     
             const formData = new FormData(this);
     
@@ -83,7 +85,7 @@ export default class SignupView extends View {
                 err.innerText = "Success!!";
             }
 
-            anchor.querySelector('button').disabled = false;
+            submitButton.disabled = false;
         }
     }
 

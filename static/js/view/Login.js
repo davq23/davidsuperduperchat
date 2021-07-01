@@ -56,6 +56,8 @@ export default class LoginView extends View {
         const err = cloneFragment.getElementById('err-login');
         const anchor = this.anchor;
 
+        const submitButton = this.submitButton;
+
         cloneFragment.lastChild.onsubmit = async function(event) {
             event.preventDefault();
 
@@ -63,7 +65,7 @@ export default class LoginView extends View {
 
             err.innerHTML = `<h3 class="fade">Loading...</h3>`;
 
-            anchor.querySelector('button').disabled = true;
+            submitButton.disabled = true;
 
             const info = {}
     
@@ -87,7 +89,7 @@ export default class LoginView extends View {
                 anchor.dispatchEvent(chatEvent);
             }
 
-            anchor.querySelector('button').disabled = false;
+            submitButton.disabled = false;
         }
     }
 
