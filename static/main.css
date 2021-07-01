@@ -147,7 +147,7 @@ button {
     }
 }
 
-@media(max-width: 500) {
+@media(max-width: 600px) {
 
     .form {
         max-width: 70vw;
