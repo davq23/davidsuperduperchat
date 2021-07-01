@@ -64,6 +64,8 @@ export default class SignupView extends View {
             event.preventDefault();
 
             err.innerHTML = `<h3 class="fade">Loading...</h3>`;
+
+            anchor.querySelector('button').disabled = true;
     
             const formData = new FormData(this);
     
@@ -84,6 +86,8 @@ export default class SignupView extends View {
             } else {
                 err.innerText = "Success!!";
             }
+
+            anchor.querySelector('button').disabled = false;
         }
     }
 

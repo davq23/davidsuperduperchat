@@ -44,13 +44,9 @@ export default class LoginView extends View {
         this.loginForm.appendChild(this.title);
         this.loginForm.appendChild(this.err);
         this.loginForm.appendChild(usernameLabel);
-        this.loginForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(this.usernameInput);
-        this.loginForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(passwordLabel);
-        this.loginForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(this.passwordInput);
-        this.loginForm.appendChild(document.createElement('br'));
         this.loginForm.appendChild(this.submitButton);
 
         this.fragment.appendChild(this.loginForm)
@@ -66,6 +62,8 @@ export default class LoginView extends View {
             const formData = new FormData(this);
 
             err.innerHTML = `<h3 class="fade">Loading...</h3>`;
+
+            anchor.querySelector('button').disabled = true;
 
             const info = {}
     
@@ -88,6 +86,8 @@ export default class LoginView extends View {
                 err.innerText = "Success!!";
                 anchor.dispatchEvent(chatEvent);
             }
+
+            anchor.querySelector('button').disabled = false;
         }
     }
 
