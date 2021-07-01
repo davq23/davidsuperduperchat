@@ -64,7 +64,8 @@ button {
     color: rgb(245, 237, 237);
     padding:  .5rem .8rem;
     border-style: none;
-    border-radius: 10%;
+    border-radius: 10px;
+    font: inherit;
 }
 
 .btn-main:active {
@@ -100,6 +101,7 @@ button {
 
 .form-input {
     font: inherit;
+    padding: 0.2rem 0.5rem;
     margin-bottom: 0.5rem;
 }
 
