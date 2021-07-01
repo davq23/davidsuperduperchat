@@ -130,6 +130,10 @@ button {
     font-size: 0.9rem;
 }
 
+.w-100 {
+    width: 100%;
+}
+
 @keyframes fadeout {
     from {
         opacity: 1;
