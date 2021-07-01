@@ -108,6 +108,10 @@ button {
     margin-bottom: 0.5rem;
 }
 
+.border-gray {
+    border: 1px solid rgb(197, 195, 195);
+}
+
 .nav {
     margin: 0;
     display: flex;
@@ -117,7 +121,6 @@ button {
     background-color: rgb(134, 215, 247);
     color: rgb(255, 255, 255);
     min-height: 5vh;
-    border: 1px solid rgb(197, 195, 195);
     flex-wrap: wrap;
 }
 
