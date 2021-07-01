@@ -95,14 +95,11 @@ document.onreadystatechange = function () {
 
                     window.dispatchEvent(evt);
                 });
-
-                var event = new Event('chat');
-                AppDiv.dispatchEvent(event);
-
-
-
-                
             });
+
+            var event = new Event('chat');
+            AppDiv.dispatchEvent(event);
+            
             break;
         }
 }
