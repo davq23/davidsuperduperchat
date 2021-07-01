@@ -77,7 +77,7 @@ export default class ChatView extends View {
         
         return new Promise(function(resolve, reject) {
             try {   
-                self.ws = new WebSocket("wss://infinite-ocean-38389.herokuapp.com/chat");
+                self.ws = new WebSocket("wss://davidsuperduperchat.herokuapp.com/chat");
             
 
                 self.ws.onopen = function() {
