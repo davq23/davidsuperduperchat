@@ -52,7 +52,7 @@ button {
 
 .btn-nav {
     padding: 0.3rem 0.5rem;
-   
+    cursor: pointer;
 } 
 
 .btn-nav:active {
