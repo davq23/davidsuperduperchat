@@ -51,6 +51,7 @@ export default class ChatView extends View {
         this.form = document.createElement("form"); 
         this.form.id = "message-form"
         this.messageInput = document.createElement("input"); 
+        this.messageInput.classList.add('form-input');
         this.messageInput.id = "message";
         this.messageInput.placeholder = "Your message goes here";
         this.messageInput.autocomplete = "off";
